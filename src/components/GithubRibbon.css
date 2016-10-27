@@ -3,12 +3,20 @@
 }
 
 .github-corner-svg {
-  fill: black;
-  color: #fff;
+  fill: #222;
   position: absolute;
   top: 0;
   border: 0;
   right: 0;
+}
+
+.corner-triangle {
+  fill: white;
+}
+
+.octo-arm,
+.octo-body {
+  fill: #222;
 }
 
 @keyframes octocat-wave {
