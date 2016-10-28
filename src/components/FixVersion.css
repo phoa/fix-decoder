@@ -1,0 +1,23 @@
+.fix-version-item {
+  list-style: none;
+  display: inline-block;
+}
+
+.fix-version-item > a {
+  display: inline-block;
+  text-decoration: none;
+  margin: 0 1em;
+  padding: 0.5em 1em;
+  font-size:  1.25rem;
+  color: #222;
+  border-bottom: 2px solid #f5f4f4;
+  cursor: pointer;
+}
+.fix-version-item > a:hover {
+  border-bottom: 2px solid #cecece;
+}
+
+.fix-version-item.selected > a {
+  border-bottom: 2px solid #222;
+  cursor: default;
+}

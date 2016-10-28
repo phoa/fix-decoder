@@ -1,0 +1,23 @@
+.fix-message {
+  position: relative;
+  text-align: center;
+}
+
+.fix-message-label {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  background-color: white;
+  padding: 0 1em;
+  transform: translate(-50%, -60%);
+}
+
+.fix-message-input {
+  height: 80px;
+  width: 80%;
+  max-width: 48em;
+  min-width: 20em;
+  margin: auto;
+  padding: 1em;
+  border: 1px solid #222;
+}

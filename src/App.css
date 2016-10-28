@@ -20,3 +20,17 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+
+/*
+###############
+# fix-version #
+###############
+*/
+.fix-version-list {
+  display: inline-block;
+  width: 100%;
+  padding: 0 2em 2em;
+  text-align: center;
+  margin:  0;
+}

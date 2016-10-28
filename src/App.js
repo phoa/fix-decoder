@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
-import { fromJS } from 'immutable';
+import xml2js from 'xml2js';
 
 import {
   request,
-  xmlToJson,
+  // xmlToJson,
 } from './helpers';
 
 import GithubRibbon from './components/GithubRibbon';
 import FixVersion from './components/FixVersion';
+import FixMessage from './components/FixMessage';
 
 import './App.css';
 
@@ -18,7 +19,7 @@ class App extends Component {
     this.loadAndParseFixXml = this.loadAndParseFixXml.bind(this);
 
     // initial state
-    this.state = fromJS({
+    this.state = {
       fixVersion: [
         {
           version: '4.4',
@@ -26,23 +27,38 @@ class App extends Component {
         },
         {
           version: '5.0',
-          path: `http://www.quickfixengine.org/FIX50.xml`,
+          path: `${process.env.PUBLIC_URL}/FIX50.xml`,
         }
       ],
+      activeFixVersion: '4.4',
       activeFixParser: null,
-    });
+    };
   }
 
-  loadAndParseFixXml(path) {
-    console.log(`loadAndParseFixXml ${path}`);
+  componentDidMount() {
+
+  }
+
+  loadAndParseFixXml(details) {
+    const path = details.path;
+    const version = details.version;
+    console.log(`loadAndParseFixXml | ${path} | ${version}`);
+
+    // update selected fix
+    this.setState({
+      activeFixVersion: version,
+    });
+
+    // request xml
     const xmlDoc = request(path);
     xmlDoc.then((xml) => {
-      console.log("typeof data: ", typeof xml);
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(xml, "text/xml");
-      const x = xmlToJson(doc);
-      console.log("x: ", x);
-    })
+      const parser = new xml2js.Parser();
+      parser.parseString(xml, (err, result) => {
+        console.log("version: ", version);
+
+        console.log(result);
+      });
+    });
 
   }
 
@@ -56,17 +72,16 @@ class App extends Component {
           <h2>FIX Decoder</h2>
         </div>
         <div className="fix-version">
-          <ul>
+          <h3>Protocol</h3>
+          <ul className="fix-version-list">
             {
-              this.state.get('fixVersion').map((item) => {
-                return <FixVersion key={item.get('version')} details={item} loadAndParseFixXml={this.loadAndParseFixXml} />
+              this.state.fixVersion.map((item) => {
+                return <FixVersion key={item.version} isSelected={ item.version === this.state.activeFixVersion } details={item} loadAndParseFixXml={this.loadAndParseFixXml} />
               })
             }
           </ul>
         </div>
-        <p className="App-intro">
-          Coming soon...
-        </p>
+        <FixMessage />
       </div>
     );
   }

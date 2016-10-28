@@ -14,6 +14,7 @@ class GithubRibbon extends React.Component {
         className="github-corner"
         href={this.props.githubLink}
         target="_blank"
+        title={this.props.githubLink}
         aria-label="View source on Github">
           <svg
             className="github-corner-svg"

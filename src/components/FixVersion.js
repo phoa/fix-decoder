@@ -9,15 +9,22 @@ import './FixVersion.css';
 
 class FixVersion extends React.Component {
   render () {
-    const version = this.props.details.get('version');
-    const path = this.props.details.get('path');
+    const details = this.props.details;
+    const version = details.version;
+    // const path = details.path;
+    const listClass = ['fix-version-item'];
+    if (this.props.isSelected ) {
+      listClass.push('selected');
+    }
     return (
-      <li>
+      <li className={listClass.join(' ')}>
         <a
           href="#"
           onClick={(evt) => {
             evt.preventDefault();
-            this.props.loadAndParseFixXml(path);
+            if (!this.props.isSelected) {
+              this.props.loadAndParseFixXml(details);
+            }
           }}
         >{version}</a>
       </li>
@@ -26,6 +33,7 @@ class FixVersion extends React.Component {
 }
 
 FixVersion.propTypes = {
+  isSelected: React.PropTypes.bool,
   details: React.PropTypes.object,
   loadAndParseFixXml: React.PropTypes.func,
 };
