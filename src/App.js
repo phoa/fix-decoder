@@ -72,7 +72,7 @@ class App extends Component {
           <h2>FIX Decoder</h2>
         </div>
         <div className="fix-version">
-          <h3>Protocol</h3>
+          <span className="fix-version-title">Protocol</span>
           <ul className="fix-version-list">
             {
               this.state.fixVersion.map((item) => {

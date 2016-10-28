@@ -27,10 +27,21 @@
 # fix-version #
 ###############
 */
-.fix-version-list {
+.fix-version {
   display: inline-block;
   width: 100%;
-  padding: 0 2em 2em;
+  padding: 2em 0 3em;
+}
+
+.fix-version-title {
+  font-size: 1.2em;
+  vertical-align: middle;
+  margin: 1em 0 0.5em;
+}
+
+.fix-version-list {
+  display: inline-block;
   text-align: center;
-  margin:  0;
+  margin: 0;
+  padding: 0;
 }
