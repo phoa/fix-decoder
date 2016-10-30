@@ -7,6 +7,7 @@
   position: absolute;
   left: 50%;
   top: 0;
+  font-size: 0.9rem;
   background-color: white;
   padding: 0 1em;
   transform: translate(-50%, -60%);
@@ -20,4 +21,28 @@
   margin: auto;
   padding: 1em;
   border: 1px solid #222;
+}
+
+.fix-message .DraftEditor-root {
+  border: 2px solid #ddd;
+  margin: auto;
+  max-width: 50em;
+  min-width: 300px;
+  width: 100%;
+}
+
+.fix-message .public-DraftEditorPlaceholder-inner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: #ddd;
+  z-index: -1;
+}
+
+.fix-message .public-DraftEditor-content {
+  /* min-height: 100px; */
+  color: #222;
+  padding: 0.5em 1em;
+  font-size: 1.25em;
 }

@@ -9,6 +9,7 @@ import {
 import GithubRibbon from './components/GithubRibbon';
 import FixVersion from './components/FixVersion';
 import FixMessage from './components/FixMessage';
+import FixResult from './components/FixResult';
 
 import './App.css';
 
@@ -82,6 +83,7 @@ class App extends Component {
           </ul>
         </div>
         <FixMessage />
+        <FixResult />
       </div>
     );
   }

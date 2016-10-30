@@ -5,7 +5,9 @@
   "devDependencies": {
     "react-scripts": "0.6.1"
   },
+  "homepage": "https://phoa.github.io/fix-decoder/",
   "dependencies": {
+    "draft-js": "^0.9.1",
     "immutable": "^3.8.1",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
