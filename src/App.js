@@ -26,10 +26,10 @@ class App extends Component {
           version: '4.4',
           path: `${process.env.PUBLIC_URL}/FIX44.xml`,
         },
-        {
-          version: '5.0',
-          path: `${process.env.PUBLIC_URL}/FIX50.xml`,
-        }
+        // {
+        //   version: '5.0',
+        //   path: `${process.env.PUBLIC_URL}/FIX50.xml`,
+        // }
       ],
       activeFixVersion: '4.4',
       activeFixParser: null,
@@ -73,7 +73,7 @@ class App extends Component {
           <h2>FIX Decoder</h2>
         </div>
         <div className="fix-version">
-          <span className="fix-version-title">Protocol</span>
+          <span className="fix-version-title">FIX Protocol</span>
           <ul className="fix-version-list">
             {
               this.state.fixVersion.map((item) => {
