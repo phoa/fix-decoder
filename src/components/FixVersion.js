@@ -11,7 +11,7 @@ class FixVersion extends React.Component {
   render () {
     const details = this.props.details;
     const version = details.version;
-    // const path = details.path;
+
     const listClass = ['fix-version-item'];
     if (this.props.isSelected ) {
       listClass.push('selected');
