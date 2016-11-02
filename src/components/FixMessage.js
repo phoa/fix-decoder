@@ -6,36 +6,7 @@ import './FixMessage.css';
 class FixMessage extends React.Component {
   constructor () {
     super();
-    // this.state = {editorState: EditorState.createEmpty()};
     this.editor = null;
-    // this.handleBeforeInput = (string) => {
-    //   console.log("--- handleBeforeInput");
-    //   console.log("string: ", string);
-    // };
-    // this.handleReturn = () => 'handled';
-    // this.onChange = (editorState) => {
-    //   console.log("--- onChange");
-    //   const content = editorState.getCurrentContent();
-    //   // const contentPlain = content.getPlainText();
-    //   // const newContent = ContentState.createFromText(contentPlain);
-    //   console.log("editorState: ", editorState.toJS());
-    //   // console.log("content: ", content);
-    //   console.log("content.getPlainText(): ", content.getPlainText());
-
-    //   return this.setState({editorState});
-    // };
-
-    // this.handlePastedText = (text, html) => {
-    //   console.log("--- handlePastedText");
-    //   const removedLineBreaks = text.replace(/(\r\n|\n|\r)/gm,"");
-    //   const newContent = ContentState.createFromText(removedLineBreaks);
-
-    //   this.setState({
-    //     editorState: EditorState.createWithContent(newContent),
-    //   });
-
-    //   return 'handled';
-    // };
   }
 
   componentDidMount() {

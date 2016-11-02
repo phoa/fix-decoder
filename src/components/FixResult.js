@@ -14,15 +14,33 @@ class FixResult extends React.Component {
 
         const raw = item.raw;
         const decoded = item.decoded;
+        const isInvalid = item.isInvalid;
+
+        const itemClass = ['fix-result-item'];
+        if (isInvalid) {
+          itemClass.push('invalid-item');
+        }
 
         return (
           <div key={i}
-            className="fix-result-item"
+            className={itemClass.join(' ')}
           >
-            <div className="fix-result-col">{raw.tag}</div>
-            <div className="fix-result-col">{raw.value}</div>
-            <div className="fix-result-col">{decoded.tag}</div>
-            <div className="fix-result-col">{decoded.value}</div>
+            <div className="fix-result-col">
+              <span className="fix-result-label">Field</span>
+              <span className="fix-result-value">{raw.tag}</span>
+            </div>
+            <div className="fix-result-col">
+              <span className="fix-result-label">Raw Value</span>
+              <span className="fix-result-value">{raw.value}</span>
+            </div>
+            <div className="fix-result-col">
+              <span className="fix-result-label">Field Description</span>
+              <span className="fix-result-value">{decoded.tag}</span>
+            </div>
+            <div className="fix-result-col">
+              <span className="fix-result-label">Value</span>
+              <span className="fix-result-value">{decoded.value}</span>
+            </div>
           </div>
         );
       });
@@ -30,12 +48,6 @@ class FixResult extends React.Component {
 
     return (
       <div className="fix-result">
-        <p
-          style={{
-            padding: '1em',
-            fontStyle: 'italic',
-          }}
-        >Styling coming soon...</p>
         {content}
       </div>
     );

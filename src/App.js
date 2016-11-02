@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Map, OrderedMap } from 'immutable';
 import {EditorState, ContentState} from 'draft-js';
-// import xml2js from 'xml2js';
 
 import {
   request,
@@ -14,6 +13,10 @@ import FixMessage from './components/FixMessage';
 import FixResult from './components/FixResult';
 
 import './App.css';
+
+/* example
+8=FIX.4.2|1123=0|9=379|35=8|128=XYZ|34=28|49=CCG|56=ABC_DEFG01|52=20090325-14:28:10|55=CVS|37=NF 0568/03252009|11=NF 0568/03252009|17=NF 0568/03252009002002002|20=0|39=2|150=2|54=2|38=500|40=1|59=0|31=25.2800|32=400|4=0|6=0|151=0|60=20090325-14:28:12|58=Fill|30=N|76=0034|207=N|47=A|430=NX|9483=000007|9578=1|382=1|375=TOD|337=0000|437=400|438=1134|579=0000200002|9433=0034|29=1|63=0|9440=002002002|10=186|
+ */
 
 class App extends Component {
   constructor() {
@@ -38,7 +41,7 @@ class App extends Component {
           }
         }),
         activeFixVersion: '4.4',
-        activeFixParser: null,
+        activeFixParser: Map({}),
         editorState: EditorState.createEmpty(),
         decodedFixMessage: null,
       })
@@ -86,19 +89,9 @@ class App extends Component {
 
       this.setState(({data}) => ({
         data: data
-          .set('activeFixParser', result)
+          .setIn(['activeFixParser', version], result)
           .update('decodedFixMessage', () => decodedFixMessage),
       }));
-
-      // const parser = new xml2js.Parser();
-      // parser.parseString(xml, (err, result) => {
-      //   console.log("version: ", version);
-
-      //   console.log('result: ', result);
-      //   this.setState(({data}) => ({
-      //     data: data.update('activeFixParser', v => result),
-      //   }));
-      // });
     });
   }
 
@@ -166,36 +159,49 @@ class App extends Component {
   decodeFixMessage(fixMessage, parser) {
     console.log("fixMessage: ", fixMessage);
     let decodedFixMessage;
+    const invalidCode = `!!INVALID!!`;
     decodedFixMessage = fixMessage.split('|')
       .map((item) => {
         try {
-          let result = null;
+          if (item === '') {
+            // return null when it's empty
+            return null;
+          }
+
+          let result = {};
           const splitEqual = item.split('=');
           if (splitEqual.length !== 2) {
             // invalid syntax
-            return result;
+            result = {
+              isInvalid: true,
+            };
           }
 
           // valid syntax, process it
 
-          result = {};
-
-          const rawTag = splitEqual[0];
-          const rawValue = splitEqual[1];
+          const rawTag = splitEqual[0] ? splitEqual[0].trim() : invalidCode;
+          const rawValue = splitEqual[1] ? splitEqual[1].trim() : invalidCode;
 
           result.raw = {
             tag: rawTag,
             value: rawValue,
           };
 
-          const fixParser = parser || this.state.data.get('activeFixParser');
+          let fixParser = null;
+          if (parser) {
+            fixParser = parser;
+          } else {
+            const version = this.state.data.get('activeFixVersion');
+            fixParser = this.state.data.getIn(['activeFixParser', version]);
+          }
 
           if (fixParser) {
+            // parser exists
             const fields = fixParser.fields;
-            const field = fields[rawTag];
-            const decodedTag = field.name;
+            const field = fields[rawTag] || invalidCode;
+            const decodedTag = field.name || invalidCode;
             const values = field.values;
-            let decodedValue = rawValue;
+            let decodedValue = rawValue || invalidCode;
             if (values && values[rawValue]) {
               // pre-defiend values exist
               decodedValue = values[rawValue].description;
@@ -204,6 +210,10 @@ class App extends Component {
             result.decoded = {
               tag: decodedTag,
               value: decodedValue,
+            }
+
+            if (decodedTag === invalidCode || decodedValue === invalidCode) {
+              result.isInvalid = true;
             }
           }
 
