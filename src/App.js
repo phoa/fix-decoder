@@ -41,7 +41,7 @@ class App extends Component {
           }
         }),
         activeFixVersion: '4.4',
-        activeFixParser: Map({}),
+        fixParserCollection: Map({}),
         editorState: EditorState.createEmpty(),
         decodedFixMessage: null,
       })
@@ -67,32 +67,52 @@ class App extends Component {
       }
     });
 
-    // request xml
-    const xmlDoc = request(path, {
-      mode: 'no-cors'
-    });
-    xmlDoc.then((xmlString) => {
-      // console.log("xmlString: ", xmlString);
-      const parser = new DOMParser();
-      const xml = parser.parseFromString(xmlString, "text/xml");
-      const result = xmlToJson(xml);
-      console.log("result: ", result);
+    // only load and parse xml if parser for selected version does not exist
+    const fixVersionParser = this.state.data.getIn(['fixParserCollection', version]);
+    let curFixMessage;
+    let decodedFixMessage
+    if (!fixVersionParser) {
+      // parser does not exist.. load and parse XML
+      console.log(`parser for FIX ${version} does not exist.. load XML and parse`);
+      // request xml
+      const xmlDoc = request(path, {
+        mode: 'no-cors'
+      });
+      xmlDoc.then((xmlString) => {
+        // console.log("xmlString: ", xmlString);
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(xmlString, "text/xml");
+        const result = xmlToJson(xml);
+        console.log("result: ", result);
 
 
+        // check if there's any fix message to be re-coded
+        curFixMessage = this.state.data.get('editorState').getCurrentContent().getPlainText();
+        decodedFixMessage = this.state.data.get('decodedFixMessage');
+
+        if (curFixMessage) {
+          decodedFixMessage = this.decodeFixMessage(curFixMessage, result);
+        }
+
+        this.setState(({data}) => ({
+          data: data
+            .setIn(['fixParserCollection', version], result)
+            .update('decodedFixMessage', () => decodedFixMessage),
+        }));
+      });
+    } else {
+      // parser exists
       // check if there's any fix message to be re-coded
-      const curFixMessage = this.state.data.get('editorState').getCurrentContent().getPlainText();
-      let decodedFixMessage = this.state.data.get('decodedFixMessage');
+      curFixMessage = this.state.data.get('editorState').getCurrentContent().getPlainText();
 
       if (curFixMessage) {
-        decodedFixMessage = this.decodeFixMessage(curFixMessage, result);
+        decodedFixMessage = this.decodeFixMessage(curFixMessage, fixVersionParser);
       }
-
       this.setState(({data}) => ({
         data: data
-          .setIn(['activeFixParser', version], result)
           .update('decodedFixMessage', () => decodedFixMessage),
       }));
-    });
+    }
   }
 
   editorOnChange(editorState) {
@@ -192,7 +212,7 @@ class App extends Component {
             fixParser = parser;
           } else {
             const version = this.state.data.get('activeFixVersion');
-            fixParser = this.state.data.getIn(['activeFixParser', version]);
+            fixParser = this.state.data.getIn(['fixParserCollection', version]);
           }
 
           if (fixParser) {
@@ -202,9 +222,9 @@ class App extends Component {
             const decodedTag = field.name || invalidCode;
             const values = field.values;
             let decodedValue = rawValue || invalidCode;
-            if (values && values[rawValue]) {
+            if (values) {
               // pre-defiend values exist
-              decodedValue = values[rawValue].description;
+              decodedValue = values[rawValue] ? values[rawValue].description : `${rawValue} (${invalidCode})`;
             }
 
             result.decoded = {
@@ -212,7 +232,7 @@ class App extends Component {
               value: decodedValue,
             }
 
-            if (decodedTag === invalidCode || decodedValue === invalidCode) {
+            if (decodedTag === invalidCode || decodedValue.indexOf(invalidCode) > -1) {
               result.isInvalid = true;
             }
           }

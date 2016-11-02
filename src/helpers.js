@@ -66,20 +66,22 @@ export function xmlToJson(xml) {
       const valueNodes = field.getElementsByTagName('value');
       const valueNodesLength = valueNodes.length;
 
-      obj.fields[number]['values'] = {};
-      for (let k = 0; k < valueNodesLength; k++) {
-        // loop <field> children
+      if (valueNodesLength > 0) {
+        obj.fields[number]['values'] = {};
+        for (let k = 0; k < valueNodesLength; k++) {
+          // loop <field> children
 
-        // get <value> field
-        const value = valueNodes[k];
-        const enumAttribute = value.getAttribute('enum');
-        const valueAttributesLength  = value.attributes.length;
+          // get <value> field
+          const value = valueNodes[k];
+          const enumAttribute = value.getAttribute('enum');
+          const valueAttributesLength  = value.attributes.length;
 
-        obj.fields[number]['values'][enumAttribute] = {};
-        for (let l = 0; l < valueAttributesLength; l++) {
-          // loop <field> attributes
-          const attribute = value.attributes.item(l);
-          obj.fields[number]['values'][enumAttribute][attribute.nodeName] = attribute.nodeValue;
+          obj.fields[number]['values'][enumAttribute] = {};
+          for (let l = 0; l < valueAttributesLength; l++) {
+            // loop <field> attributes
+            const attribute = value.attributes.item(l);
+            obj.fields[number]['values'][enumAttribute][attribute.nodeName] = attribute.nodeValue;
+          }
         }
       }
     }
