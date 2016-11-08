@@ -1,0 +1,37 @@
+.fix-version-upload {
+  display: inline-block;
+  width: 100%;
+  padding: 2em 1em;
+}
+
+.fix-version-upload-area {
+  display: inline-block;
+  text-decoration: none;
+  padding: 1.5em 3em;
+  font-size:  1.25rem;
+  line-height: 20px;
+  letter-spacing: 0.03em;
+  color: #ddd;
+  border: 2px dashed #ddd;
+  cursor: pointer;
+}
+.fix-version-upload-active {
+  border: 2px solid #222;
+}
+.fix-version-copy > span {
+  display: inline-block;
+  width: 100%;
+  line-height: 1.25em;
+}
+.fix-version-copy > span:nth-child(2){
+  font-style: italic;
+  font-size: 0.75em;
+}
+/* .fix-version-upload > a:hover {
+  border-bottom: 2px solid #cecece;
+} */
+
+/* .fix-version-upload.selected > a {
+  border-bottom: 2px solid #222;
+  cursor: default;
+} */

@@ -30,7 +30,7 @@
 .fix-version {
   display: inline-block;
   width: 100%;
-  padding: 2em 0 3em;
+  padding: 2em 0 0;
 }
 
 .fix-version-title {

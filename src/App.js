@@ -9,6 +9,7 @@ import {
 
 import GithubRibbon from './components/GithubRibbon';
 import FixVersion from './components/FixVersion';
+import FixVersionUpload from './components/FixVersionUpload';
 import FixMessage from './components/FixMessage';
 import FixResult from './components/FixResult';
 
@@ -23,6 +24,7 @@ class App extends Component {
     super();
 
     this.loadAndParseFixXml = this.loadAndParseFixXml.bind(this);
+    this.uploadXml = this.uploadXml.bind(this);
     this.editorOnChange = this.editorOnChange.bind(this);
     this.editorHandlePastedText = this.editorHandlePastedText.bind(this);
     this.editorHandleReturn = this.editorHandleReturn.bind(this);
@@ -41,6 +43,7 @@ class App extends Component {
           }
         }),
         activeFixVersion: '4.4',
+        uploadXmlDetails: Map({}),
         fixParserCollection: Map({}),
         editorState: EditorState.createEmpty(),
         decodedFixMessage: null,
@@ -53,15 +56,32 @@ class App extends Component {
     this.loadAndParseFixXml(defaultFixVersion);
   }
 
+  uploadXml(files) {
+    if (files.length > 0) {
+      const file = files[0];
+      const filename = file.name;
+
+      this.setState(({data}) => ({
+        data: data
+          .setIn(['uploadXmlDetails', 'filename'], filename)
+      }));
+
+      // const reader = new FileReader();
+      // // Closure to capture the file information.
+      // reader.onload = (function(theFile) {
+      //   return function(e) {
+      //     const filename = theFile.name;
+      //   };
+      // })(file);
+    }
+  }
+
   loadAndParseFixXml(details) {
-    console.log("details: ", details);
     const path = details.path;
     const version = details.version;
-    console.log(`loadAndParseFixXml | ${path} | ${version}`);
 
     // update selected fix
     this.setState(({data}) => {
-      console.log("data.get('activeFixVersion'): ", data.get('activeFixVersion'));
       return {
         data: data.update('activeFixVersion', v => version),
       }
@@ -73,7 +93,6 @@ class App extends Component {
     let decodedFixMessage
     if (!fixVersionParser) {
       // parser does not exist.. load and parse XML
-      console.log(`parser for FIX ${version} does not exist.. load XML and parse`);
       // request xml
       const xmlDoc = request(path, {
         mode: 'no-cors'
@@ -83,7 +102,7 @@ class App extends Component {
         const parser = new DOMParser();
         const xml = parser.parseFromString(xmlString, "text/xml");
         const result = xmlToJson(xml);
-        console.log("result: ", result);
+        // console.log("result: ", result);
 
 
         // check if there's any fix message to be re-coded
@@ -116,7 +135,6 @@ class App extends Component {
   }
 
   editorOnChange(editorState) {
-    console.log("--- onChange");
     // const content = editorState.getCurrentContent();
     // const contentPlain = content.getPlainText();
     // const newContent = ContentState.createFromText(contentPlain);
@@ -131,7 +149,6 @@ class App extends Component {
 
     if (newFixMessage !== curFixMessage) {
       // fix message has changed, process it
-      console.log("newFixMessage: ", newFixMessage);
 
       // decode fix message
       decodedFixMessage = this.decodeFixMessage(newFixMessage);
@@ -146,7 +163,6 @@ class App extends Component {
   };
 
   editorHandlePastedText(text, html) {
-    console.log("--- handlePastedText");
     const removedLineBreaks = text.replace(/(\r\n|\n|\r)/gm,"");
     const newContent = ContentState.createFromText(removedLineBreaks);
     const newFixMessage = newContent.getPlainText();
@@ -157,7 +173,6 @@ class App extends Component {
 
     if (newFixMessage !== curFixMessage) {
       // fix message has changed, process it
-      console.log("newFixMessage: ", newFixMessage);
 
       // decode fix message
       decodedFixMessage = this.decodeFixMessage(newFixMessage);
@@ -177,7 +192,6 @@ class App extends Component {
   }
 
   decodeFixMessage(fixMessage, parser) {
-    console.log("fixMessage: ", fixMessage);
     let decodedFixMessage;
     const invalidCode = `!!INVALID!!`;
     decodedFixMessage = fixMessage.split('|')
@@ -244,7 +258,6 @@ class App extends Component {
         }
       });
 
-    console.log("decodedFixMessage: ", decodedFixMessage);
     return decodedFixMessage;
   }
 
@@ -253,8 +266,9 @@ class App extends Component {
     const activeFixVersion = this.state.data.get('activeFixVersion');
     const editorState = this.state.data.get('editorState');
     const decodedFixMessage = this.state.data.get('decodedFixMessage');
+    const uploadXmlDetails = this.state.data.get('uploadXmlDetails');
 
-    const fixVersionList = fixVersionMap.keySeq().map((key) => {
+    let fixVersionList = fixVersionMap.keySeq().map((key) => {
       const item = fixVersionMap.get(key);
       const version = item.version;
 
@@ -277,6 +291,10 @@ class App extends Component {
             }
           </ul>
         </div>
+        <FixVersionUpload
+          details={uploadXmlDetails}
+          uploadXml={this.uploadXml}
+        />
         <FixMessage
           editorState={editorState}
           editorOnChange={this.editorOnChange}

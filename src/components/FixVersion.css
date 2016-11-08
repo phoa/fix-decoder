@@ -7,17 +7,20 @@
   display: inline-block;
   text-decoration: none;
   margin: 0 1em;
-  padding: 0 1em;
+  padding: 0 1em 0.25em;
   font-size:  1.25rem;
-  color: #222;
+  line-height: 20px;
+  color: #cecece;
   border-bottom: 2px solid #f5f4f4;
   cursor: pointer;
 }
 .fix-version-item > a:hover {
+  color: #cecece;
   border-bottom: 2px solid #cecece;
 }
 
 .fix-version-item.selected > a {
+  color: #222;
   border-bottom: 2px solid #222;
   cursor: default;
 }
