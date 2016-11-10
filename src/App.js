@@ -45,6 +45,7 @@ class App extends Component {
         activeFixVersion: '4.4',
         uploadXmlDetails: Map({}),
         fixParserCollection: Map({}),
+        delimiter: '|',
         editorState: EditorState.createEmpty(),
         decodedFixMessage: null,
       })
@@ -194,7 +195,8 @@ class App extends Component {
   decodeFixMessage(fixMessage, parser) {
     let decodedFixMessage;
     const invalidCode = `!!INVALID!!`;
-    decodedFixMessage = fixMessage.split('|')
+    const delimiter = this.state.data.get('delimiter');
+    decodedFixMessage = fixMessage.split(delimiter)
       .map((item) => {
         try {
           if (item === '') {
@@ -204,6 +206,7 @@ class App extends Component {
 
           let result = {};
           const splitEqual = item.split('=');
+          console.log("splitEqual: ", splitEqual);
           if (splitEqual.length !== 2) {
             // invalid syntax
             result = {
@@ -213,8 +216,10 @@ class App extends Component {
 
           // valid syntax, process it
 
-          const rawTag = splitEqual[0] ? splitEqual[0].trim() : invalidCode;
-          const rawValue = splitEqual[1] ? splitEqual[1].trim() : invalidCode;
+          const firstItem = splitEqual.shift().trim();
+          const restOfSplit = [...splitEqual].join('=').trim();
+          const rawTag = firstItem ? firstItem : invalidCode;
+          const rawValue = restOfSplit ? restOfSplit : invalidCode;
 
           result.raw = {
             tag: rawTag,
