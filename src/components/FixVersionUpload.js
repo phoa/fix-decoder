@@ -28,15 +28,15 @@ class FixVersionUpload extends React.Component {
     const listClass = ['fix-version-upload'];
     let dropzoneCopy = (
       <div className="fix-version-copy">
-        <span>User Your Own Fix</span>
+        <span>Use Your Own FIX</span>
         <span>Click or drop your FIX XML file here.</span>
       </div>
     );
-    if (!details.isEmpty()) {
+    if (details.get('status') !== 'waiting') {
       dropzoneCopy = (
         <div className="fix-version-copy">
           <span>Parsing {details.get('filename')}</span>
-          <span>...coming soon :)</span>
+          <span>...{details.get('status')}</span>
         </div>
       );
     }

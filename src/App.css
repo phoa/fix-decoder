@@ -1,3 +1,7 @@
+p {
+  margin: 0;
+}
+
 .App {
   text-align: center;
 }
@@ -44,4 +48,27 @@
   text-align: center;
   margin: 0;
   padding: 0;
+}
+
+/*
+##############
+# disclaimer #
+##############
+*/
+.disclaimer-container {
+  position: relative;
+  padding: 1em;
+  color: #cecece;
+  font-style: italic;
+}
+.disclaimer-container:before {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 10em;
+  height: 1px;
+  background-color: #ddd;
 }

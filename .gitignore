@@ -3,6 +3,9 @@
 # dependencies
 node_modules
 
+# test files
+test.*
+
 # testing
 coverage
 

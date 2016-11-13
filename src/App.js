@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Map, OrderedMap } from 'immutable';
+import { Map, List, OrderedMap } from 'immutable';
 import {EditorState, ContentState} from 'draft-js';
 
 import {
@@ -42,10 +42,14 @@ class App extends Component {
             path: `${process.env.PUBLIC_URL}/FIX50.xml`,
           }
         }),
+        customVersionMap: OrderedMap({}),
         activeFixVersion: '4.4',
-        uploadXmlDetails: Map({}),
+        uploadXmlDetails: Map({
+          status: 'waiting',
+          filename: null,
+        }),
         fixParserCollection: Map({}),
-        delimiter: '|',
+        delimiter: List(['|', '^']),
         editorState: EditorState.createEmpty(),
         decodedFixMessage: null,
       })
@@ -59,22 +63,72 @@ class App extends Component {
 
   uploadXml(files) {
     if (files.length > 0) {
+      // const self = this;
       const file = files[0];
       const filename = file.name;
+      let uploadXmlDetails = this.state.data.get('uploadXmlDetails');
 
+      uploadXmlDetails = uploadXmlDetails
+        .set('status', 'parsing')
+        .set('filename', filename);
       this.setState(({data}) => ({
         data: data
-          .setIn(['uploadXmlDetails', 'filename'], filename)
+          .set('uploadXmlDetails', uploadXmlDetails)
       }));
 
-      // const reader = new FileReader();
-      // // Closure to capture the file information.
-      // reader.onload = (function(theFile) {
-      //   return function(e) {
-      //     const filename = theFile.name;
-      //   };
-      // })(file);
+      const reader = new FileReader();
+      // Closure to capture the file information.
+      reader.onload = (e) => {
+        const xmlString = e.target.result;
+        const parseXmlToJson = this._parseXml(xmlString);
+        try {
+          if (parseXmlToJson) {
+            const customVersionMap = this.state.data.get('customVersionMap');
+            const customVersion = `c-${customVersionMap.count() + 1}`;
+
+            uploadXmlDetails = uploadXmlDetails.set('status', 'success');
+            this.setState(({data}) => ({
+              data: data
+                .setIn(['customVersionMap', customVersion], {
+                  version: customVersion,
+                })
+                .setIn(['fixParserCollection', customVersion], parseXmlToJson)
+                .set('uploadXmlDetails', uploadXmlDetails)
+            }));
+
+            // use custom FIX
+            const useCustomFixVersion = this.state.data.get('customVersionMap').get(customVersion);
+            this.loadAndParseFixXml(useCustomFixVersion);
+          }
+        } catch (err) {
+          uploadXmlDetails = uploadXmlDetails.set('status', 'error');
+          this.setState(({data}) => ({
+            data: data
+              .set('uploadXmlDetails', uploadXmlDetails)
+          }));
+        }
+
+        // reset upload state
+        setTimeout(() => {
+          uploadXmlDetails = uploadXmlDetails
+            .set('status', 'waiting')
+            .set('filename', null)
+          this.setState(({data}) => ({
+            data: data
+              .set('uploadXmlDetails', uploadXmlDetails)
+          }));
+        }, 3000);
+      };
+
+      reader.readAsText(file);
     }
+  }
+
+  _parseXml(xmlString) {
+    // console.log("xmlString: ", xmlString);
+    const parser = new DOMParser();
+    const xml = parser.parseFromString(xmlString, "text/xml");
+    return xmlToJson(xml);
   }
 
   loadAndParseFixXml(details) {
@@ -100,9 +154,7 @@ class App extends Component {
       });
       xmlDoc.then((xmlString) => {
         // console.log("xmlString: ", xmlString);
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(xmlString, "text/xml");
-        const result = xmlToJson(xml);
+        const result = this._parseXml(xmlString);
         // console.log("result: ", result);
 
 
@@ -195,8 +247,12 @@ class App extends Component {
   decodeFixMessage(fixMessage, parser) {
     let decodedFixMessage;
     const invalidCode = `!!INVALID!!`;
-    const delimiter = this.state.data.get('delimiter');
-    decodedFixMessage = fixMessage.split(delimiter)
+    const delimiterList = this.state.data.get('delimiter');
+    let delimiterUsed;
+    delimiterUsed = delimiterList.find((item) => {
+      return fixMessage.indexOf(item) > -1;
+    });
+    decodedFixMessage = fixMessage.split(delimiterUsed)
       .map((item) => {
         try {
           if (item === '') {
@@ -206,7 +262,7 @@ class App extends Component {
 
           let result = {};
           const splitEqual = item.split('=');
-          console.log("splitEqual: ", splitEqual);
+          // console.log("splitEqual: ", splitEqual);
           if (splitEqual.length !== 2) {
             // invalid syntax
             result = {
@@ -268,6 +324,7 @@ class App extends Component {
 
   render() {
     const fixVersionMap = this.state.data.get('fixVersionMap');
+    const customVersionMap = this.state.data.get('customVersionMap');
     const activeFixVersion = this.state.data.get('activeFixVersion');
     const editorState = this.state.data.get('editorState');
     const decodedFixMessage = this.state.data.get('decodedFixMessage');
@@ -275,6 +332,12 @@ class App extends Component {
 
     let fixVersionList = fixVersionMap.keySeq().map((key) => {
       const item = fixVersionMap.get(key);
+      const version = item.version;
+
+      return <FixVersion key={version} isSelected={ version === activeFixVersion } details={item} loadAndParseFixXml={this.loadAndParseFixXml} />
+    });
+    let customFixVersionList = customVersionMap.keySeq().map((key) => {
+      const item = customVersionMap.get(key);
       const version = item.version;
 
       return <FixVersion key={version} isSelected={ version === activeFixVersion } details={item} loadAndParseFixXml={this.loadAndParseFixXml} />
@@ -294,6 +357,9 @@ class App extends Component {
             {
               fixVersionList
             }
+            {
+              customFixVersionList
+            }
           </ul>
         </div>
         <FixVersionUpload
@@ -309,6 +375,9 @@ class App extends Component {
         <FixResult
           decodedFixMessage={decodedFixMessage}
         />
+        <div className="disclaimer-container">
+          <p>Everything here is being processed locally, and no data is sent to our or any servers.</p>
+        </div>
       </div>
     );
   }
