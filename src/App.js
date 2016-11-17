@@ -49,7 +49,7 @@ class App extends Component {
           filename: null,
         }),
         fixParserCollection: Map({}),
-        delimiter: List(['|', '^']),
+        delimiter: List(['|', '^A', '^']),
         editorState: EditorState.createEmpty(),
         decodedFixMessage: null,
       })
