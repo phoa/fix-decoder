@@ -38,6 +38,7 @@
   transform: translate(-50%, -50%);
   color: #ddd;
   z-index: -1;
+  width: 100%;
 }
 
 .fix-message .public-DraftEditor-content {
