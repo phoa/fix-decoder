@@ -1,5 +1,6 @@
 .fix-result {
-  margin: 2em auto 2em;
+  margin: 0 auto;
+  padding: 1em 0 2em;
   max-width: 50em;
   min-width: 300px;
   width: 100%;

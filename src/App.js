@@ -8,6 +8,7 @@ import {
 } from './helpers';
 
 import GithubRibbon from './components/GithubRibbon';
+import ReactIcon from './components/ReactIcon';
 import FixVersion from './components/FixVersion';
 import FixVersionUpload from './components/FixVersionUpload';
 import FixMessage from './components/FixMessage';
@@ -375,8 +376,10 @@ class App extends Component {
         <FixResult
           decodedFixMessage={decodedFixMessage}
         />
-        <div className="disclaimer-container">
-          <p>Everything here is being processed locally, and no data is sent to our or any servers.</p>
+        <div className="footer-container">
+          <p className="disclaimer">Everything here is processed locally, and stays in your browser.<br />Your data is not sent or stored in any servers.</p>
+          <p className="madewith"><i className="material-icons">code</i> with <ReactIcon width={24} height={24} /></p>
+          <p className="madeby">By <a href="https://sg.linkedin.com/in/pnphoa" target="_blank" className="madeby-link link-to-linkedin">Paul Nikolas Phoa</a><span className="madeby-divider">&bull;</span><a href="https://sg.linkedin.com/in/janaudy" target="_blank" className="madeby-link link-to-linkedin">Thierry Janaudy</a></p>
         </div>
       </div>
     );

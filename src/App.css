@@ -55,13 +55,14 @@ p {
 # disclaimer #
 ##############
 */
-.disclaimer-container {
+
+.footer-container {
   position: relative;
-  padding: 1em;
-  color: #cecece;
-  font-style: italic;
+  font-size: 0.75rem;
+  padding-bottom: 1em;
 }
-.disclaimer-container:before {
+
+.footer-container:before {
   content: '';
   display: inline-block;
   position: absolute;
@@ -70,5 +71,51 @@ p {
   transform: translate(-50%, 0);
   width: 10em;
   height: 1px;
-  background-color: #ddd;
+  background-color: #222;
+}
+
+.disclaimer {
+  position: relative;
+  padding: 1em;
+  color: #222;
+  font-style: italic;
+}
+
+/*
+#############
+# madewidth #
+#############
+*/
+
+.madewith {
+  vertical-align: middle;
+  font-size: 1rem;
+}
+.madewith .material-icons {
+  vertical-align: top;
+}
+
+/*
+##########
+# madeby #
+##########
+*/
+
+.madeby {
+  margin-top: 0.25em;
+  font-size: 0.875rem;
+}
+
+.madeby-divider {
+  padding: 0 0.35em;
+  font-size: 1.15rem;
+  vertical-align: middle;
+}
+
+.madeby-link {
+
+}
+
+.link-to-linkedin {
+  color: #2578b5;
 }
