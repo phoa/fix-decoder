@@ -11,8 +11,8 @@
   font-size:  1.25rem;
   line-height: 20px;
   letter-spacing: 0.03em;
-  color: #ddd;
-  border: 2px dashed #ddd;
+  color: #cecece;
+  border: 2px dashed #cecece;
   cursor: pointer;
 }
 .fix-version-upload-active {

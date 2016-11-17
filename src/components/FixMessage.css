@@ -24,7 +24,7 @@
 }
 
 .fix-message .DraftEditor-root {
-  border: 2px solid #ddd;
+  border: 2px solid #cecece;
   margin: auto;
   max-width: 50em;
   min-width: 300px;
@@ -36,7 +36,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  color: #ddd;
+  color: #cecece;
   z-index: -1;
   width: 100%;
 }
