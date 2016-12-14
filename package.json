@@ -1,6 +1,6 @@
 {
   "name": "fix-decoder",
-  "version": "0.1.0",
+  "version": "0.7.0",
   "private": true,
   "devDependencies": {
     "babel-eslint": "^6.1.2",
@@ -11,14 +11,14 @@
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^5.2.2",
     "gh-pages": "^0.11.0",
-    "react-scripts": "0.6.1"
+    "react-scripts": "0.7.0"
   },
   "homepage": "https://phoa.github.io/fix-decoder/",
   "dependencies": {
     "draft-js": "^0.9.1",
     "immutable": "^3.8.1",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
     "react-dropzone": "^3.7.3",
     "sanitize.css": "^4.1.0",
     "whatwg-fetch": "^1.0.0",
