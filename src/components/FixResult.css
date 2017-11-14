@@ -10,6 +10,7 @@
   background-color: #f5f4f4;
   margin: 2px 0;
   color: black;
+  display: flex;
 }
 .fix-result-item:hover {
   background-color: #e7e7e7;
@@ -19,11 +20,27 @@
 }
 
 .fix-result-col {
-  display: inline-block;
+  // display: inline-block;
+  display: flex;
+  flex-direction: column;
   padding: 0 0.5em;
   width: calc(100% / 4);
   text-align: left;
   vertical-align: top;
+}
+.fix-result-col.field-col {
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: 100px;
+}
+.fix-result-col.raw-col {
+  flex-grow: 1;
+}
+.fix-result-col.desc-col {
+  flex-grow: 1;
+}
+.fix-result-col.val-col {
+  flex-grow: 2;
 }
 
 .fix-result-label,

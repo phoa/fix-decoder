@@ -25,19 +25,19 @@ class FixResult extends React.Component {
           <div key={i}
             className={itemClass.join(' ')}
           >
-            <div className="fix-result-col">
+            <div className="fix-result-col field-col">
               <span className="fix-result-label">Field</span>
               <span className="fix-result-value">{raw.tag}</span>
             </div>
-            <div className="fix-result-col">
+            <div className="fix-result-col raw-col">
               <span className="fix-result-label">Raw Value</span>
               <span className="fix-result-value">{raw.value}</span>
             </div>
-            <div className="fix-result-col">
+            <div className="fix-result-col desc-col">
               <span className="fix-result-label">Field Description</span>
               <span className="fix-result-value">{decoded.tag}</span>
             </div>
-            <div className="fix-result-col">
+            <div className="fix-result-col val-col">
               <span className="fix-result-label">Value</span>
               <span className="fix-result-value">{decoded.value}</span>
             </div>
