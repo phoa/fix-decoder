@@ -17,6 +17,25 @@
 .fix-delimiter-input:hover {
   outline: none;
 }
+.fix-delimiter-input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color:#cecece;
+}
+
+.fix-delimiter-input:-moz-placeholder { /* Firefox 18- */
+  color:#cecece;
+}
+
+.fix-delimiter-input::-moz-placeholder { /* Firefox 19+ */
+  color:#cecece;
+}
+
+.fix-delimiter-input:-ms-input-placeholder { /* IE */
+  color:#cecece;
+}
+
+.fix-delimiter-input::-ms-input-placeholder { /* IE Edge */
+  color:#cecece;
+}
 .fix-delimiter-input {
   font-size: 1.25em;
   width: 15rem;
