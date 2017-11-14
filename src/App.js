@@ -416,6 +416,8 @@ class App extends Component {
     const delimiterUsed = this.state.data.get('delimiterUsed');
     const delimiterInput = this.state.data.get('delimiterInput');
 
+    console.log('decodedFixMessage: ', decodedFixMessage);
+
     let fixVersionList = fixVersionMap.keySeq().map((key) => {
       const item = fixVersionMap.get(key);
       const version = item.version;
@@ -454,11 +456,13 @@ class App extends Component {
           editorHandlePastedText={this.editorHandlePastedText}
           editorHandleReturn={this.editorHandleReturn}
         />
-        <Delimiter
-          delimiterUsed={delimiterUsed}
-          delimiterInput={delimiterInput}
-          delimiterInputOnChange={this.delimiterInputOnChange}
-        />
+        {decodedFixMessage && decodedFixMessage.length > 0 && decodedFixMessage[0] !== null  &&
+          <Delimiter
+            delimiterUsed={delimiterUsed}
+            delimiterInput={delimiterInput}
+            delimiterInputOnChange={this.delimiterInputOnChange}
+          />
+        }
         <FixResult
           decodedFixMessage={decodedFixMessage}
         />
