@@ -51,17 +51,6 @@ class FixResult extends React.Component {
         {content}
       </div>
     );
-
-    // return (
-    //   <div className="fix-result">
-    //     <p
-    //       style={{
-    //         padding: '1em',
-    //         fontStyle: 'italic',
-    //       }}
-    //     >Decoding FIX message coming soon...</p>
-    //   </div>
-    // );
   }
 }
 
