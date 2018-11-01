@@ -1,26 +1,42 @@
-.fix-version-item {
-  list-style: none;
-  display: inline-block;
+.fix-version {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  margin: 0;
+  width: 100%;
+  padding: 1em 0 0;
 }
 
-.fix-version-item > a {
-  display: inline-block;
-  text-decoration: none;
-  margin: 0 1em;
-  padding: 0 1em 0.25em;
-  font-size:  1.25rem;
-  line-height: 20px;
-  color: #cecece;
-  border-bottom: 2px solid #f5f4f4;
-  cursor: pointer;
-}
-.fix-version-item > a:hover {
-  color: #cecece;
-  border-bottom: 2px solid #cecece;
+.fix-version-title {
+  font-size: 1.25rem;
+  vertical-align: middle;
+  margin: 0;
 }
 
-.fix-version-item.selected > a {
-  color: #222;
-  border-bottom: 2px solid #222;
-  cursor: default;
+.fix-version-list {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 40em;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.fixVersionTransitionGroup-enter {
+  opacity: 0.01;
+}
+
+.fixVersionTransitionGroup-enter.fixVersionTransitionGroup-enter-active {
+  opacity: 1;
+  transition: opacity 3000ms ease-in;
+}
+
+.fixVersionTransitionGroup-leave {
+  opacity: 1;
+}
+
+.fixVersionTransitionGroup-leave.fixVersionTransitionGroup-leave-active {
+  opacity: 0.01;
+  transition: opacity 3000ms ease-in;
 }

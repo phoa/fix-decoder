@@ -4,38 +4,58 @@
  */
 
 import React from 'react';
+import PropTypes from 'prop-types';
+import posed, { PoseGroup } from 'react-pose';
+import styled from 'styled-components';
+
+import FixVersionItem from './FixVersionItem';
 
 import './FixVersion.css';
 
-class FixVersion extends React.Component {
-  render () {
-    const details = this.props.details;
-    const version = details.version;
+const FixVersionListItem = styled(
+  posed.li({
+    enter: {
+      background: '#fff',
+      color: '#222',
+      transition: { duration: 1000, ease: 'easeOut' }
+    },
+    exit: { background: '#222', color: '#fff' }
+  })
+)`
+  margin: 0.5em 1em;
+  list-style: none;
+`;
 
-    const listClass = ['fix-version-item'];
-    if (this.props.isSelected ) {
-      listClass.push('selected');
-    }
+function FixVersion(props) {
+  const { fixVersionList, activeFixVersion, loadAndParseFixXml } = props;
+  const fixVersionItems = fixVersionList.map(v => {
+    const version = v.version;
+    const key = `fix-version-${version}`;
     return (
-      <li className={listClass.join(' ')}>
-        <a
-          href="#"
-          onClick={(evt) => {
-            evt.preventDefault();
-            if (!this.props.isSelected) {
-              this.props.loadAndParseFixXml(details);
-            }
-          }}
-        >{version}</a>
-      </li>
+      <FixVersionListItem className="fix-version-list-item-wrapper" key={key}>
+        <FixVersionItem
+          isSelected={version === activeFixVersion}
+          details={v}
+          loadAndParseFixXml={loadAndParseFixXml}
+        />
+      </FixVersionListItem>
     );
-  }
+  });
+
+  return (
+    <div className={'fix-version'}>
+      <span className={'fix-version-title'}>FIX Protocol</span>
+      <ul className={'fix-version-list'}>
+        <PoseGroup>{fixVersionItems}</PoseGroup>
+      </ul>
+    </div>
+  );
 }
 
 FixVersion.propTypes = {
-  isSelected: React.PropTypes.bool,
-  details: React.PropTypes.object,
-  loadAndParseFixXml: React.PropTypes.func,
+  activeFixVersion: PropTypes.string,
+  fixVersionList: PropTypes.array,
+  loadAndParseFixXml: PropTypes.func
 };
 
-export default FixVersion
+export default FixVersion;

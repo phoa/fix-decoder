@@ -12,15 +12,16 @@
   color: black;
   display: flex;
 }
+
 .fix-result-item:hover {
   background-color: #e7e7e7;
 }
+
 .fix-result-item.invalid-item {
-  color: #E91E63;
+  color: #e91e63;
 }
 
 .fix-result-col {
-  // display: inline-block;
   display: flex;
   flex-direction: column;
   padding: 0 0.5em;
@@ -28,17 +29,21 @@
   text-align: left;
   vertical-align: top;
 }
+
 .fix-result-col.field-col {
   flex-grow: 0;
   flex-shrink: 0;
   flex-basis: 100px;
 }
+
 .fix-result-col.raw-col {
   flex-grow: 1;
 }
+
 .fix-result-col.desc-col {
   flex-grow: 1;
 }
+
 .fix-result-col.val-col {
   flex-grow: 2;
 }
@@ -47,6 +52,7 @@
 .fix-result-value {
   display: inline-block;
   width: 100%;
+  padding: 2px 0;
 }
 
 .fix-result-label {

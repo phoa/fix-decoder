@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
 import { Map, List, OrderedMap } from 'immutable';
-import {EditorState, ContentState} from 'draft-js';
+import { EditorState, ContentState } from 'draft-js';
 
-import {
-  request,
-  xmlToJson,
-} from './helpers';
+import { request, xmlToJson, cleanString } from './helpers';
 
-import GithubRibbon from './components/GithubRibbon';
-import ReactIcon from './components/ReactIcon';
 import FixVersion from './components/FixVersion';
 import FixVersionUpload from './components/FixVersionUpload';
 import FixMessage from './components/FixMessage';
 import FixResult from './components/FixResult';
 import Delimiter from './components/Delimiter';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 import './App.css';
 
@@ -40,26 +37,30 @@ class App extends Component {
           '44': {
             version: '4.4',
             path: `${process.env.PUBLIC_URL}/FIX44.xml`,
+            filename: null,
+            isCustom: false
           },
           '50': {
             version: '5.0',
             path: `${process.env.PUBLIC_URL}/FIX50.xml`,
+            filename: null,
+            isCustom: false
           }
         }),
         customVersionMap: OrderedMap({}),
         activeFixVersion: '4.4',
         uploadXmlDetails: Map({
           status: 'waiting',
-          filename: null,
+          filename: null
         }),
         fixParserCollection: Map({}),
         delimiterList: List(['|', '^A', '^']),
         delimiterInput: null,
         delimiterUsed: null,
         editorState: EditorState.createEmpty(),
-        decodedFixMessage: null,
+        decodedFixMessage: null
       })
-    }
+    };
   }
 
   componentWillMount() {
@@ -67,9 +68,8 @@ class App extends Component {
     this.loadAndParseFixXml(defaultFixVersion);
   }
 
-  uploadXml(files) {
+  uploadXml(files, rejectedFiles) {
     if (files.length > 0) {
-      // const self = this;
       const file = files[0];
       const filename = file.name;
       let uploadXmlDetails = this.state.data.get('uploadXmlDetails');
@@ -77,14 +77,13 @@ class App extends Component {
       uploadXmlDetails = uploadXmlDetails
         .set('status', 'parsing')
         .set('filename', filename);
-      this.setState(({data}) => ({
-        data: data
-          .set('uploadXmlDetails', uploadXmlDetails)
+      this.setState(({ data }) => ({
+        data: data.set('uploadXmlDetails', uploadXmlDetails)
       }));
 
       const reader = new FileReader();
       // Closure to capture the file information.
-      reader.onload = (e) => {
+      reader.onload = e => {
         const xmlString = e.target.result;
         const parseXmlToJson = this._parseXml(xmlString);
         try {
@@ -93,37 +92,37 @@ class App extends Component {
             const customVersion = `c-${customVersionMap.count() + 1}`;
 
             uploadXmlDetails = uploadXmlDetails.set('status', 'success');
-            this.setState(({data}) => ({
+            this.setState(({ data }) => ({
               data: data
                 .setIn(['customVersionMap', customVersion], {
                   version: customVersion,
+                  filename: cleanString(filename),
+                  isCustom: true
                 })
                 .setIn(['fixParserCollection', customVersion], parseXmlToJson)
                 .set('uploadXmlDetails', uploadXmlDetails)
             }));
 
             // use custom FIX
-            const useCustomFixVersion = this.state.data.get('customVersionMap').get(customVersion);
+            const useCustomFixVersion = this.state.data
+              .get('customVersionMap')
+              .get(customVersion);
             this.loadAndParseFixXml(useCustomFixVersion);
           }
         } catch (err) {
           uploadXmlDetails = uploadXmlDetails.set('status', 'error');
-          this.setState(({data}) => ({
-            data: data
-              .set('uploadXmlDetails', uploadXmlDetails)
+          this.setState(({ data }) => ({
+            data: data.set('uploadXmlDetails', uploadXmlDetails)
           }));
         }
 
         // reset upload state
-        setTimeout(() => {
-          uploadXmlDetails = uploadXmlDetails
-            .set('status', 'waiting')
-            .set('filename', null)
-          this.setState(({data}) => ({
-            data: data
-              .set('uploadXmlDetails', uploadXmlDetails)
-          }));
-        }, 3000);
+        uploadXmlDetails = uploadXmlDetails
+          .set('status', 'waiting')
+          .set('filename', null);
+        this.setState(({ data }) => ({
+          data: data.set('uploadXmlDetails', uploadXmlDetails)
+        }));
       };
 
       reader.readAsText(file);
@@ -132,67 +131,82 @@ class App extends Component {
 
   _parseXml(xmlString) {
     const parser = new DOMParser();
-    const xml = parser.parseFromString(xmlString, "text/xml");
+    const xml = parser.parseFromString(xmlString, 'text/xml');
     return xmlToJson(xml);
   }
 
   loadAndParseFixXml(details) {
-    const path = details.path;
-    const version = details.version;
+    const { path, version } = details;
 
     // update selected fix
-    this.setState(({data}) => {
-      return {
-        data: data.set('activeFixVersion', version),
-        // data: data.update('activeFixVersion', v => version),
-      }
-    }, () => {
-      // setState callback
-      // only load and parse xml if parser for selected version does not exist
-      const fixVersionParser = this.state.data.getIn(['fixParserCollection', version]);
-      const delimiterInput = this.state.data.get('delimiterInput');
-      const delimiterUsed = this.state.data.get('delimiterUsed');
-      const delimiter = delimiterInput || delimiterUsed;
-      let curFixMessage;
-      let decodedFixMessage = this.state.data.get('decodedFixMessage');
-      if (!fixVersionParser) {
-        // parser does not exist.. load and parse XML
-        // request xml
-        const xmlDoc = request(path, {
-          mode: 'no-cors'
-        });
-        xmlDoc.then((xmlString) => {
-          const result = this._parseXml(xmlString);
+    this.setState(
+      ({ data }) => {
+        return {
+          data: data.set('activeFixVersion', version)
+        };
+      },
+      () => {
+        // setState callback
+        // only load and parse xml if parser for selected version does not exist
+        const fixVersionParser = this.state.data.getIn([
+          'fixParserCollection',
+          version
+        ]);
+        const delimiterInput = this.state.data.get('delimiterInput');
+        const delimiterUsed = this.state.data.get('delimiterUsed');
+        const delimiter = delimiterInput || delimiterUsed;
+        let curFixMessage;
+        let decodedFixMessage = this.state.data.get('decodedFixMessage');
+        if (!fixVersionParser) {
+          // parser does not exist.. load and parse XML
+          // request xml
+          const xmlDoc = request(path, {
+            mode: 'no-cors'
+          });
+          xmlDoc.then(xmlString => {
+            const result = this._parseXml(xmlString);
 
+            // check if there's any fix message to be re-coded
+            curFixMessage = this.state.data
+              .get('editorState')
+              .getCurrentContent()
+              .getPlainText();
+
+            if (curFixMessage) {
+              decodedFixMessage = this.decodeFixMessage(
+                curFixMessage,
+                delimiter,
+                result
+              );
+            }
+
+            this.setState(({ data }) => ({
+              data: data
+                .setIn(['fixParserCollection', version], result)
+                .set('decodedFixMessage', decodedFixMessage)
+            }));
+          });
+        } else {
+          // parser exists
           // check if there's any fix message to be re-coded
-          curFixMessage = this.state.data.get('editorState').getCurrentContent().getPlainText();
+          curFixMessage = this.state.data
+            .get('editorState')
+            .getCurrentContent()
+            .getPlainText();
 
           if (curFixMessage) {
-            decodedFixMessage = this.decodeFixMessage(curFixMessage, delimiter, result);
+            decodedFixMessage = this.decodeFixMessage(
+              curFixMessage,
+              delimiter,
+              fixVersionParser
+            );
           }
-
-          this.setState(({data}) => ({
-            data: data
-              .setIn(['fixParserCollection', version], result)
-              .set('decodedFixMessage', decodedFixMessage),
-              // .update('decodedFixMessage', () => decodedFixMessage),
+          this.setState(({ data }) => ({
+            data: data.set('decodedFixMessage', decodedFixMessage)
           }));
-        });
-      } else {
-        // parser exists
-        // check if there's any fix message to be re-coded
-        curFixMessage = this.state.data.get('editorState').getCurrentContent().getPlainText();
-
-        if (curFixMessage) {
-          decodedFixMessage = this.decodeFixMessage(curFixMessage, delimiter, fixVersionParser);
         }
-        this.setState(({data}) => ({
-          data: data
-            .set('decodedFixMessage', decodedFixMessage),
-            // .update('decodedFixMessage', () => decodedFixMessage),
-        }));
       }
-    });
+    );
   }
 
   delimiterInputOnChange(event) {
@@ -204,7 +218,10 @@ class App extends Component {
 
     // parse existing fix message if any
 
-    const curFixMessage = this.state.data.get('editorState').getCurrentContent().getPlainText();
+    const curFixMessage = this.state.data
+      .get('editorState')
+      .getCurrentContent()
+      .getPlainText();
     let decodedFixMessage = this.state.data.get('decodedFixMessage');
     let delimiterUsed = this.state.data.get('delimiterUsed');
     if (curFixMessage) {
@@ -216,17 +233,20 @@ class App extends Component {
       decodedFixMessage = this.decodeFixMessage(curFixMessage, delimiter);
     }
 
-    this.setState(({data}) => ({
+    this.setState(({ data }) => ({
       data: data
         .set('delimiterInput', delimiterInput)
         .set('delimiterUsed', delimiterUsed)
-        .set('decodedFixMessage', decodedFixMessage),
+        .set('decodedFixMessage', decodedFixMessage)
     }));
   }
 
   editorOnChange(editorState) {
     const newFixMessage = editorState.getCurrentContent().getPlainText();
-    const curFixMessage = this.state.data.get('editorState').getCurrentContent().getPlainText();
+    const curFixMessage = this.state.data
+      .get('editorState')
+      .getCurrentContent()
+      .getPlainText();
 
     const delimiterInput = this.state.data.get('delimiterInput');
     let decodedFixMessage = this.state.data.get('decodedFixMessage');
@@ -244,21 +264,23 @@ class App extends Component {
       decodedFixMessage = this.decodeFixMessage(newFixMessage, delimiter);
     }
 
-    return this.setState(({data}) => ({
+    return this.setState(({ data }) => ({
       data: data
         .set('editorState', editorState)
         .set('delimiterUsed', delimiterUsed)
-        .set('decodedFixMessage', decodedFixMessage),
-        // .update('decodedFixMessage', () => decodedFixMessage),
+        .set('decodedFixMessage', decodedFixMessage)
     }));
-  };
+  }
 
   editorHandlePastedText(text, html) {
-    const removedLineBreaks = text.replace(/(\r\n|\n|\r)/gm,"");
+    const removedLineBreaks = text.replace(/(\r\n|\n|\r)/gm, '');
     const newContent = ContentState.createFromText(removedLineBreaks);
     const newFixMessage = newContent.getPlainText();
 
-    const curFixMessage = this.state.data.get('editorState').getCurrentContent().getPlainText();
+    const curFixMessage = this.state.data
+      .get('editorState')
+      .getCurrentContent()
+      .getPlainText();
 
     const delimiterInput = this.state.data.get('delimiterInput');
     let delimiterUsed = this.state.data.get('delimiterUsed');
@@ -276,16 +298,15 @@ class App extends Component {
       decodedFixMessage = this.decodeFixMessage(newFixMessage, delimiter);
     }
 
-    this.setState(({data}) => ({
+    this.setState(({ data }) => ({
       data: data
         .set('editorState', EditorState.createWithContent(newContent))
         .set('delimiterUsed', delimiterUsed)
-        .set('decodedFixMessage', decodedFixMessage),
-        // .update('decodedFixMessage', () => decodedFixMessage),
+        .set('decodedFixMessage', decodedFixMessage)
     }));
 
     return 'handled';
-  };
+  }
 
   editorHandleReturn() {
     return 'handled';
@@ -301,9 +322,11 @@ class App extends Component {
         // test current delimiterUsed
         const equalOccurrences = fixMessage.split('=').length;
         const delimiterOccurences = fixMessage.split(delimiterUsed).length;
-        if (equalOccurrences === delimiterOccurences || equalOccurrences === delimiterOccurences + 1) {
+        if (
+          equalOccurrences === delimiterOccurences ||
+          equalOccurrences === delimiterOccurences + 1
+        ) {
           // current delimiterUsed is most likely being used here
-          // console.log('re-using current delimiterUsed: ', delimiterUsed);
           return delimiterUsed;
         }
       }
@@ -311,97 +334,98 @@ class App extends Component {
       // no delimitterUsed before, find one
 
       // try pre-defined delimiterList
-      delimiterUsed = delimiterList.find((item) => {
+      delimiterUsed = delimiterList.find(item => {
         return fixMessage.indexOf(item) > -1;
       });
 
       if (delimiterUsed) {
-        // console.log('known delimtier, delimiterUsed: ', delimiterUsed);
         return delimiterUsed;
       }
 
       // unknown delimiter is most likely used
       // try to determine delimiter by getting the character before the BodyLength "9="
-      const regex = new RegExp("([^a-zA-Z0-9])9=*");
+      const regex = new RegExp('([^a-zA-Z0-9])9=*');
       const execRegex = regex.exec(fixMessage);
       [, delimiterUsed] = execRegex || [];
 
-      // console.log("auto detect delimiter used: ", delimiterUsed);
       return delimiterUsed;
     }
 
-    // console.log('no fixMessage, no delimiterUsed');
     return null;
   }
 
   decodeFixMessage(fixMessage, delimiter, parser) {
     let decodedFixMessage;
     const invalidCode = `!!INVALID!!`;
-    decodedFixMessage = fixMessage.split(delimiter)
-      .map((item) => {
-        try {
-          if (item === '') {
-            // return null when it's empty
-            return null;
-          }
-
-          let result = {};
-          const splitEqual = item.split('=');
-          if (splitEqual.length !== 2) {
-            // invalid syntax
-            result = {
-              isInvalid: true,
-            };
-          }
-
-          // valid syntax, process it
-
-          const firstItem = splitEqual.shift().trim();
-          const restOfSplit = [...splitEqual].join('=').trim();
-          const rawTag = firstItem ? firstItem : invalidCode;
-          const rawValue = restOfSplit ? restOfSplit : invalidCode;
-
-          result.raw = {
-            tag: rawTag,
-            value: rawValue,
-          };
-
-          let fixParser = null;
-          if (parser) {
-            fixParser = parser;
-          } else {
-            const version = this.state.data.get('activeFixVersion');
-            fixParser = this.state.data.getIn(['fixParserCollection', version]);
-          }
-
-          if (fixParser) {
-            // parser exists
-            const fields = fixParser.fields;
-            const field = fields[rawTag] || invalidCode;
-            const decodedTag = field.name || invalidCode;
-            const values = field.values;
-            let decodedValue = rawValue || invalidCode;
-            if (values) {
-              // pre-defiend values exist
-              decodedValue = values[rawValue] ? values[rawValue].description : `${rawValue} (${invalidCode})`;
-            }
-
-            result.decoded = {
-              tag: decodedTag,
-              value: decodedValue,
-            }
-
-            if (decodedTag === invalidCode || decodedValue.indexOf(invalidCode) > -1) {
-              result.isInvalid = true;
-            }
-          }
-
-          return result;
-        } catch(err) {
-          console.log("err: ", err);
+    decodedFixMessage = fixMessage.split(delimiter).map(item => {
+      try {
+        if (item === '') {
+          // return null when it's empty
           return null;
         }
-      });
+
+        let result = {};
+        const splitEqual = item.split('=');
+        if (splitEqual.length !== 2) {
+          // invalid syntax
+          result = {
+            isInvalid: true
+          };
+        }
+
+        // valid syntax, process it
+
+        const firstItem = splitEqual.shift().trim();
+        const restOfSplit = [...splitEqual].join('=').trim();
+        const rawTag = firstItem ? firstItem : invalidCode;
+        const rawValue = restOfSplit ? restOfSplit : invalidCode;
+
+        result.raw = {
+          tag: rawTag,
+          value: rawValue
+        };
+
+        let fixParser = null;
+        if (parser) {
+          fixParser = parser;
+        } else {
+          const version = this.state.data.get('activeFixVersion');
+          fixParser = this.state.data.getIn(['fixParserCollection', version]);
+        }
+
+        if (fixParser) {
+          // parser exists
+          const fields = fixParser.fields;
+          const field = fields[rawTag] || invalidCode;
+          const decodedTag = field.name || invalidCode;
+          const values = field.values;
+          let decodedValue = rawValue || invalidCode;
+          if (values) {
+            // pre-defiend values exist
+            decodedValue = values[rawValue]
+              ? values[rawValue].description
+              : `${rawValue} (${invalidCode})`;
+          }
+
+          result.decoded = {
+            tag: decodedTag,
+            value: decodedValue
+          };
+
+          if (
+            decodedTag === invalidCode ||
+            decodedValue.indexOf(invalidCode) > -1
+          ) {
+            result.isInvalid = true;
+          }
+        }
+
+        return result;
+      } catch (err) {
+        console.log('err: ', err);
+        return null;
+      }
+    });
 
     return decodedFixMessage;
   }
@@ -415,37 +439,16 @@ class App extends Component {
     const uploadXmlDetails = this.state.data.get('uploadXmlDetails');
     const delimiterUsed = this.state.data.get('delimiterUsed');
     const delimiterInput = this.state.data.get('delimiterInput');
-
-    console.log('decodedFixMessage: ', decodedFixMessage);
-
-    let fixVersionList = fixVersionMap.keySeq().map((key) => {
-      const item = fixVersionMap.get(key);
-      const version = item.version;
-
-      return <FixVersion key={version} isSelected={ version === activeFixVersion } details={item} loadAndParseFixXml={this.loadAndParseFixXml} />
-    });
-    let customFixVersionList = customVersionMap.keySeq().map((key) => {
-      const item = customVersionMap.get(key);
-      const version = item.version;
-
-      return <FixVersion key={version} isSelected={ version === activeFixVersion } details={item} loadAndParseFixXml={this.loadAndParseFixXml} />
-    });
+    const allFixVersions = fixVersionMap.merge(customVersionMap).toArray();
 
     return (
       <div className="App">
-        <GithubRibbon
-          githubLink="https://github.com/phoa/fix-decoder"
+        <Header />
+        <FixVersion
+          activeFixVersion={activeFixVersion}
+          fixVersionList={allFixVersions}
+          loadAndParseFixXml={this.loadAndParseFixXml}
         />
-        <div className="App-header">
-          <h2>FIX Decoder</h2>
-        </div>
-        <div className="fix-version">
-          <span className="fix-version-title">FIX Protocol</span>
-          <ul className="fix-version-list">
-            {fixVersionList}
-            {customFixVersionList}
-          </ul>
-        </div>
         <FixVersionUpload
           details={uploadXmlDetails}
           uploadXml={this.uploadXml}
@@ -456,21 +459,17 @@ class App extends Component {
           editorHandlePastedText={this.editorHandlePastedText}
           editorHandleReturn={this.editorHandleReturn}
         />
-        {decodedFixMessage && decodedFixMessage.length > 0 && decodedFixMessage[0] !== null  &&
-          <Delimiter
-            delimiterUsed={delimiterUsed}
-            delimiterInput={delimiterInput}
-            delimiterInputOnChange={this.delimiterInputOnChange}
-          />
-        }
-        <FixResult
-          decodedFixMessage={decodedFixMessage}
-        />
-        <div className="footer-container">
-          <p className="disclaimer">Everything here is processed locally, and stays in your browser.<br />Your data is not sent or stored in any servers.</p>
-          <p className="madewith"><i className="material-icons">code</i> with <ReactIcon width={24} height={24} /></p>
-          <p className="madeby">By <a href="https://sg.linkedin.com/in/pnphoa" target="_blank" className="madeby-link link-to-linkedin">Paul Nikolas Phoa</a><span className="madeby-divider">&bull;</span><a href="https://sg.linkedin.com/in/janaudy" target="_blank" className="madeby-link link-to-linkedin">Thierry Janaudy</a></p>
-        </div>
+        {decodedFixMessage &&
+          decodedFixMessage.length > 0 &&
+          decodedFixMessage[0] !== null && (
+            <Delimiter
+              delimiterUsed={delimiterUsed}
+              delimiterInput={delimiterInput}
+              delimiterInputOnChange={this.delimiterInputOnChange}
+            />
+          )}
+        <FixResult decodedFixMessage={decodedFixMessage} />
+        <Footer />
       </div>
     );
   }
