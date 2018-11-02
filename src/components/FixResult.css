@@ -7,11 +7,16 @@
 }
 
 .fix-result-item {
-  background-color: #f5f4f4;
+  background-color: #ffffff;
   margin: 2px 0;
   color: black;
   display: flex;
 }
+
+.fix-result-item:nth-child(odd) {
+  background-color: #f7f7f7;
+}
+
 
 .fix-result-item:hover {
   background-color: #e7e7e7;
