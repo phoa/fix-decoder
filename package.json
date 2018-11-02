@@ -2,7 +2,6 @@
   "name": "fix-decoder",
   "version": "0.7.0",
   "private": true,
-  "homepage": "https://phoa.github.io/fix-decoder/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
