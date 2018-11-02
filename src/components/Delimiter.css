@@ -1,5 +1,5 @@
 .fix-delimiter {
-  margin-top: 1em;
+  margin-top: 1.5em;
   position: relative;
 }
 
@@ -48,7 +48,7 @@
   width: 15rem;
   text-align: center;
   vertical-align: middle;
-  line-height: 1;
+  line-height: 1.5em;
   padding: 0.35em 0 0.25em;
   border: none;
   color: black;
