@@ -2,36 +2,38 @@
   "name": "fix-decoder",
   "version": "0.7.0",
   "private": true,
-  "devDependencies": {
-    "babel-eslint": "^7.0.0",
-    "eslint": "^3.8.1",
-    "eslint-config-react-app": "^0.3.0",
-    "eslint-plugin-flowtype": "^2.21.0",
-    "eslint-plugin-import": "^2.0.1",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.4.1",
-    "gh-pages": "^0.11.0",
-    "react-scripts": "^0.8.4"
-  },
-  "homepage": "http://fix-decoder.netlify.com/",
-  "dependencies": {
-    "draft-js": "^0.9.1",
-    "immutable": "^3.8.1",
-    "react": "^15.4.1",
-    "react-dom": "^15.4.1",
-    "react-dropzone": "^3.7.3",
-    "sanitize.css": "^4.1.0",
-    "whatwg-fetch": "^1.0.0",
-    "xml2js": "^0.4.17"
-  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "deploy": "npm run build&&gh-pages -d build"
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "dependencies": {
+    "draft-js": "^0.10.5",
+    "immutable": "^3.8.2",
+    "prop-types": "^15.6.2",
+    "react": "^16.6.0",
+    "react-dom": "^16.6.0",
+    "react-dropzone": "^7.0.1",
+    "react-pose": "^3.3.7",
+    "react-scripts": "2.1.0",
+    "sanitize.css": "^8.0.0",
+    "styled-components": "^4.0.2",
+    "whatwg-fetch": "^3.0.0",
+    "xml2js": "^0.4.19"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.0.1"
   }
 }

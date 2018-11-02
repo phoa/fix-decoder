@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Editor } from 'draft-js';
 
 import './FixMessage.css';
 
 class FixMessage extends React.Component {
-  constructor () {
+  constructor() {
     super();
     this.editor = null;
   }
@@ -15,12 +16,12 @@ class FixMessage extends React.Component {
     }
   }
 
-  render () {
+  render() {
     return (
       <div className="fix-message">
         <div className="fix-message-label">FIX Message</div>
         <Editor
-          ref={(el) => {
+          ref={el => {
             this.editor = el;
           }}
           placeholder="Enter your FIX message here..."
@@ -35,10 +36,10 @@ class FixMessage extends React.Component {
 }
 
 FixMessage.propTypes = {
-  editorState: React.PropTypes.object,
-  editorOnChange: React.PropTypes.func,
-  editorHandlePastedText: React.PropTypes.func,
-  editorHandleReturn: React.PropTypes.func,
+  editorState: PropTypes.object,
+  editorOnChange: PropTypes.func,
+  editorHandlePastedText: PropTypes.func,
+  editorHandleReturn: PropTypes.func
 };
 
-export default FixMessage
+export default FixMessage;

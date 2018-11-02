@@ -1,0 +1,25 @@
+.fix-version-item {
+  display: inline-block;
+  list-style: none;
+}
+
+.fix-version-item > button {
+  display: inline-block;
+  text-decoration: none;
+  padding: 0.25em 1em;
+  font-size: 1.25rem;
+  line-height: 20px;
+  color: #cecece;
+  border-bottom: 2px solid #f5f4f4;
+  cursor: pointer;
+}
+.fix-version-item > button:hover {
+  color: #cecece;
+  border-bottom: 2px solid #cecece;
+}
+
+.fix-version-item.selected > button {
+  color: #222;
+  border-bottom: 2px solid #222;
+  cursor: default;
+}

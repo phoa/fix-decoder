@@ -1,0 +1,70 @@
+/*
+##############
+# disclaimer #
+##############
+*/
+
+.footer-container {
+  position: relative;
+  font-size: 0.75rem;
+  padding-bottom: 1em;
+  line-height: 1.5em;
+}
+
+.footer-container:before {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 10em;
+  height: 1px;
+  background-color: #222;
+}
+
+.disclaimer {
+  position: relative;
+  padding: 1em;
+  color: #222;
+  font-style: italic;
+}
+
+/*
+#############
+# madewidth #
+#############
+*/
+
+.madewith {
+  vertical-align: middle;
+  font-size: 1rem;
+  margin-bottom: 0.25em;
+}
+.madewith .material-icons {
+  vertical-align: top;
+}
+
+/*
+##########
+# madeby #
+##########
+*/
+
+.madeby {
+  margin-bottom: 1em;
+  font-size: 0.875rem;
+}
+
+.madeby-divider {
+  padding: 0 0.35em;
+  font-size: 1.15rem;
+  vertical-align: middle;
+}
+
+.madeby-link {
+}
+
+.link-to-linkedin {
+  color: #2578b5;
+}

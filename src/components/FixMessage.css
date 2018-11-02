@@ -7,10 +7,10 @@
   position: absolute;
   left: 50%;
   top: 0;
-  font-size: 0.875rem;
+  font-size: 1rem;
   background-color: white;
   padding: 0 1em;
-  transform: translate(-50%, -60%);
+  transform: translate(-50%, -56%);
 }
 
 .fix-message-input {
@@ -42,7 +42,6 @@
 }
 
 .fix-message .public-DraftEditor-content {
-  /* min-height: 100px; */
   color: #222;
   padding: 0.5em 1em;
   font-size: 1.25em;

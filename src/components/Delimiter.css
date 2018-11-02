@@ -7,54 +7,58 @@
   position: absolute;
   top: 0;
   left: 50%;
-  transform: translate(-50%, -60%);
+  transform: translate(-50%, -56%);
+  font-size: 1rem;
   background-color: white;
   padding: 0 1em;
-  font-size: 0.875rem;
 }
 
 .fix-delimiter-input,
 .fix-delimiter-input:hover {
   outline: none;
 }
-.fix-delimiter-input::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  color:#cecece;
+
+.fix-delimiter-input::-webkit-input-placeholder {
+  /* Chrome/Opera/Safari */
+  color: #cecece;
 }
 
-.fix-delimiter-input:-moz-placeholder { /* Firefox 18- */
-  color:#cecece;
+.fix-delimiter-input:-moz-placeholder {
+  /* Firefox 18- */
+  color: #cecece;
 }
 
-.fix-delimiter-input::-moz-placeholder { /* Firefox 19+ */
-  color:#cecece;
+.fix-delimiter-input::-moz-placeholder {
+  /* Firefox 19+ */
+  color: #cecece;
 }
 
-.fix-delimiter-input:-ms-input-placeholder { /* IE */
-  color:#cecece;
+.fix-delimiter-input:-ms-input-placeholder {
+  /* IE */
+  color: #cecece;
 }
 
-.fix-delimiter-input::-ms-input-placeholder { /* IE Edge */
-  color:#cecece;
+.fix-delimiter-input::-ms-input-placeholder {
+  /* IE Edge */
+  color: #cecece;
 }
+
 .fix-delimiter-input {
   font-size: 1.25em;
   width: 15rem;
   text-align: center;
   vertical-align: middle;
   line-height: 1;
-  padding: 0.25em 0;
+  padding: 0.35em 0 0.25em;
   border: none;
-  // background-color: #f1f1f1;
   color: black;
   border: 1px solid #cecece;
 }
 
 .input-info {
   font-style: italic;
-  width: 15rem;
-  margin: 0 auto;
-  text-align: left;
-  font-size: 0.75rem;
+  text-align: center;
+  margin: 0.125rem auto 0;
+  font-size: 0.875rem;
   white-space: nowrap;
-  // color: #cecece;
 }

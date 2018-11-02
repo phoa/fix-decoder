@@ -1,37 +1,41 @@
 .fix-version-upload {
-  display: inline-block;
+  display: flex;
+  justify-content: center;
   width: 100%;
-  padding: 2em 1em;
+  padding: 1em 1em 2em;
 }
 
 .fix-version-upload-area {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-decoration: none;
-  padding: 1.5em 3em;
-  font-size:  1.25rem;
+  font-size: 1.25rem;
   line-height: 20px;
   letter-spacing: 0.03em;
   color: #cecece;
   border: 2px dashed #cecece;
   cursor: pointer;
+  max-width: 30em;
+  width: 70%;
+  height: 6em;
 }
-.fix-version-upload-active {
+
+.fix-version-upload-accept {
   border: 2px solid #222;
 }
+
+.fix-version-upload-reject {
+  border: 2px solid #e91e63;
+}
+
 .fix-version-copy > span {
   display: inline-block;
   width: 100%;
   line-height: 1.25em;
 }
-.fix-version-copy > span:nth-child(2){
+
+.fix-version-copy > span:nth-child(2) {
   font-style: italic;
   font-size: 0.75em;
 }
-/* .fix-version-upload > a:hover {
-  border-bottom: 2px solid #cecece;
-} */
-
-/* .fix-version-upload.selected > a {
-  border-bottom: 2px solid #222;
-  cursor: default;
-} */
