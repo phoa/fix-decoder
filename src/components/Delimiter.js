@@ -5,6 +5,9 @@ import './Delimiter.css';
 
 function Delimiter(props) {
   const { delimiterInput, delimiterUsed, delimiterInputOnChange } = props;
+
+  const placeholder = delimiterUsed || `¯\\_(ツ)_/¯`;
+
   return (
     <div className="fix-delimiter">
       <label htmlFor="fix-delimiter-input" className="fix-delimiter-label">
@@ -15,7 +18,7 @@ function Delimiter(props) {
         id="fix-delimiter-input"
         className="fix-delimiter-input"
         value={delimiterInput || ''}
-        placeholder={delimiterUsed}
+        placeholder={placeholder}
         onChange={delimiterInputOnChange}
       />
       <p className="input-info">

@@ -435,6 +435,8 @@ class App extends Component {
     const customVersionMap = this.state.data.get('customVersionMap');
     const activeFixVersion = this.state.data.get('activeFixVersion');
     const editorState = this.state.data.get('editorState');
+    const curFixMessage =
+      editorState.getCurrentContent().getPlainText() || null;
     const decodedFixMessage = this.state.data.get('decodedFixMessage');
     const uploadXmlDetails = this.state.data.get('uploadXmlDetails');
     const delimiterUsed = this.state.data.get('delimiterUsed');
@@ -459,15 +461,13 @@ class App extends Component {
           editorHandlePastedText={this.editorHandlePastedText}
           editorHandleReturn={this.editorHandleReturn}
         />
-        {decodedFixMessage &&
-          decodedFixMessage.length > 0 &&
-          decodedFixMessage[0] !== null && (
-            <Delimiter
-              delimiterUsed={delimiterUsed}
-              delimiterInput={delimiterInput}
-              delimiterInputOnChange={this.delimiterInputOnChange}
-            />
-          )}
+        {curFixMessage && (
+          <Delimiter
+            delimiterUsed={delimiterUsed}
+            delimiterInput={delimiterInput}
+            delimiterInputOnChange={this.delimiterInputOnChange}
+          />
+        )}
         <FixResult decodedFixMessage={decodedFixMessage} />
         <Footer />
       </div>

@@ -1,6 +1,7 @@
 .fix-message {
   position: relative;
   text-align: center;
+  line-height: 1.875em;
 }
 
 .fix-message-label {
