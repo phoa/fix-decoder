@@ -14,6 +14,10 @@ function Footer(props) {
         stays in your browser. <br /> Your data is not sent or stored in any
         servers.
       </p>
+      <p className="madewith">
+        <i className="material-icons"> code </i> with{' '}
+        <ReactIcon width={24} height={24} />
+      </p>
       <p className="madeby">
         <a
           href="https://sg.linkedin.com/in/pnphoa"
@@ -32,10 +36,6 @@ function Footer(props) {
         >
           Thierry Janaudy
         </a>
-      </p>
-      <p className="madewith">
-        <i className="material-icons"> code </i> with
-        <ReactIcon width={24} height={24} />
       </p>
     </div>
   );
