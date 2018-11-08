@@ -26,6 +26,14 @@ export function cleanString(dirtyString) {
   return dirtyString.replace(/[|&;$%@"<>()+,]/g, '');
 }
 
+export function gaSendEvent(gaPayload) {
+  // eslint-disable-next-line
+  ga('send', 'event', gaPayload);
+
+  // eslint-disable-next-line
+  ga('pnp.send', 'event', gaPayload);
+}
+
 /**
  * Parse XML to JSON
  * https://davidwalsh.name/convert-xml-json

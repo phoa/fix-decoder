@@ -14,6 +14,10 @@ function Footer(props) {
         stays in your browser. <br /> Your data is not sent or stored in any
         servers.
       </p>
+      <p className="madewith">
+        <i className="material-icons"> code </i> with{' '}
+        <ReactIcon width={24} height={24} />
+      </p>
       <p className="madeby">
         <a
           href="https://sg.linkedin.com/in/pnphoa"
@@ -31,22 +35,6 @@ function Footer(props) {
           className="madeby-link link-to-linkedin"
         >
           Thierry Janaudy
-        </a>
-      </p>
-      <p className="madewith">
-        <i className="material-icons"> code </i> with
-        <ReactIcon width={24} height={24} />
-      </p>
-      <p className="deployby">
-        <a
-          href="https://www.netlify.com"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <img
-            alt="Deploys by Netlify"
-            src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
-          />
         </a>
       </p>
     </div>
