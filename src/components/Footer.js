@@ -37,18 +37,6 @@ function Footer(props) {
         <i className="material-icons"> code </i> with
         <ReactIcon width={24} height={24} />
       </p>
-      <p className="deployby">
-        <a
-          href="https://www.netlify.com"
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <img
-            alt="Deploys by Netlify"
-            src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"
-          />
-        </a>
-      </p>
     </div>
   );
 }

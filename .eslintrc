@@ -1,0 +1,6 @@
+{
+  "globals": {
+    "ga": true
+  },
+  "extends": "react-app"
+}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Map, List, OrderedMap } from 'immutable';
 import { EditorState, ContentState } from 'draft-js';
 
-import { request, xmlToJson, cleanString } from './helpers';
+import { request, xmlToJson, cleanString, gaSendEvent } from './helpers';
 
 import FixVersion from './components/FixVersion';
 import FixVersionUpload from './components/FixVersionUpload';
@@ -108,12 +108,25 @@ class App extends Component {
               .get('customVersionMap')
               .get(customVersion);
             this.loadAndParseFixXml(useCustomFixVersion);
+
+            gaSendEvent({
+              eventCategory: 'Upload Custom XML',
+              eventAction: 'parse',
+              eventLabel: 'success',
+              eventValue: 1
+            });
           }
         } catch (err) {
           uploadXmlDetails = uploadXmlDetails.set('status', 'error');
           this.setState(({ data }) => ({
             data: data.set('uploadXmlDetails', uploadXmlDetails)
           }));
+          gaSendEvent({
+            eventCategory: 'Upload Custom XML',
+            eventAction: 'parse',
+            eventLabel: 'error',
+            eventValue: 1
+          });
         }
 
         // reset upload state
@@ -239,6 +252,13 @@ class App extends Component {
         .set('delimiterUsed', delimiterUsed)
         .set('decodedFixMessage', decodedFixMessage)
     }));
+
+    gaSendEvent({
+      eventCategory: 'Manual Delimiter Input',
+      eventAction: 'input',
+      eventLabel: 'Unrecognized Delimiter',
+      eventValue: 1
+    });
   }
 
   editorOnChange(editorState) {
@@ -423,10 +443,22 @@ class App extends Component {
         return result;
       } catch (err) {
         console.log('err: ', err);
+        gaSendEvent({
+          eventCategory: 'Decode FIX Message',
+          eventAction: 'decode',
+          eventLabel: 'error',
+          eventValue: 1
+        });
         return null;
       }
     });
 
+    gaSendEvent({
+      eventCategory: 'Decode FIX Message',
+      eventAction: 'decode',
+      eventLabel: 'success',
+      eventValue: 1
+    });
     return decodedFixMessage;
   }
 
