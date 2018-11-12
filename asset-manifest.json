@@ -1,15 +1,15 @@
 {
-  "main.css": "/static/css/main.6514edf5.chunk.css",
-  "main.js": "/static/js/main.c7e7726e.chunk.js",
-  "main.js.map": "/static/js/main.c7e7726e.chunk.js.map",
-  "static/css/1.c0e5a60d.chunk.css": "/static/css/1.c0e5a60d.chunk.css",
-  "static/js/1.f3487559.chunk.js": "/static/js/1.f3487559.chunk.js",
-  "static/js/1.f3487559.chunk.js.map": "/static/js/1.f3487559.chunk.js.map",
-  "runtime~main.js": "/static/js/runtime~main.229c360f.js",
-  "runtime~main.js.map": "/static/js/runtime~main.229c360f.js.map",
-  "static/css/main.6514edf5.chunk.css.map": "/static/css/main.6514edf5.chunk.css.map",
-  "static/css/1.c0e5a60d.chunk.css.map": "/static/css/1.c0e5a60d.chunk.css.map",
-  "index.html": "/index.html",
-  "precache-manifest.cb7a586ece1042045ad9405b5bae8b80.js": "/precache-manifest.cb7a586ece1042045ad9405b5bae8b80.js",
-  "service-worker.js": "/service-worker.js"
+  "main.css": "/fix-decoder/static/css/main.8970d53e.chunk.css",
+  "main.js": "/fix-decoder/static/js/main.6d689348.chunk.js",
+  "main.js.map": "/fix-decoder/static/js/main.6d689348.chunk.js.map",
+  "static/css/1.f4615307.chunk.css": "/fix-decoder/static/css/1.f4615307.chunk.css",
+  "static/js/1.76ba7509.chunk.js": "/fix-decoder/static/js/1.76ba7509.chunk.js",
+  "static/js/1.76ba7509.chunk.js.map": "/fix-decoder/static/js/1.76ba7509.chunk.js.map",
+  "runtime~main.js": "/fix-decoder/static/js/runtime~main.d4259476.js",
+  "runtime~main.js.map": "/fix-decoder/static/js/runtime~main.d4259476.js.map",
+  "static/css/1.f4615307.chunk.css.map": "/fix-decoder/static/css/1.f4615307.chunk.css.map",
+  "static/css/main.8970d53e.chunk.css.map": "/fix-decoder/static/css/main.8970d53e.chunk.css.map",
+  "index.html": "/fix-decoder/index.html",
+  "precache-manifest.55594a7d1062cbec5d7cd43b74d55906.js": "/fix-decoder/precache-manifest.55594a7d1062cbec5d7cd43b74d55906.js",
+  "service-worker.js": "/fix-decoder/service-worker.js"
 }
