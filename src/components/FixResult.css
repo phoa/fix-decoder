@@ -7,14 +7,19 @@
 }
 
 .fix-result-item {
-  background-color: #f7f7f7;
-  margin: 2px 0;
+  background-color: #ffffff;
   color: black;
   display: flex;
+  margin: 2px 0 10px;
+  padding: 2px 0;
+  box-shadow: 0 0.5px 0 0 #ffffff inset, 0 1px 2px 0 #B3B3B3;
+  transition: 0.1s transform ease-in-out;
+  cursor: default;
 }
 
 .fix-result-item:hover {
-  background-color: #e7e7e7;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.46);
+  transform: scale(1.01);
 }
 
 .fix-result-item.invalid-item {
