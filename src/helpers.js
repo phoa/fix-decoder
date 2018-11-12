@@ -1,10 +1,16 @@
 import 'whatwg-fetch';
 
+export function isProduction() {
+  return process.env.NODE_ENV === 'production';
+}
+
 export function request(url, options) {
   return fetch(url, options)
     .then(checkStatus)
     .then(readXml)
-    .catch(error => ({ error }));
+    .catch(error => ({
+      error
+    }));
 }
 
 function checkStatus(response) {
@@ -26,12 +32,22 @@ export function cleanString(dirtyString) {
   return dirtyString.replace(/[|&;$%@"<>()+,]/g, '');
 }
 
-export function gaSendEvent(gaPayload) {
-  // eslint-disable-next-line
-  ga('send', 'event', gaPayload);
+export function setupGA() {
+  const ga = window.ga;
+  if (isProduction() && ga) {
+    ga('create', 'UA-88918550-1', 'auto');
+    ga('create', 'UA-128576472-1', 'auto', 'pnp');
+    ga('send', 'pageview');
+    ga('pnp.send', 'pageview');
+  }
+}
 
-  // eslint-disable-next-line
-  ga('pnp.send', 'event', gaPayload);
+export function gaSendEvent(gaPayload) {
+  const ga = window.ga;
+  if (isProduction() && ga) {
+    ga('send', 'event', gaPayload);
+    ga('pnp.send', 'event', gaPayload);
+  }
 }
 
 /**
@@ -86,8 +102,7 @@ export function xmlToJson(xml) {
           for (let l = 0; l < valueAttributesLength; l++) {
             // loop <field> attributes
             const attribute = value.attributes.item(l);
-            obj.fields[number]['values'][enumAttribute][attribute.nodeName] =
-              attribute.nodeValue;
+            obj.fields[number]['values'][enumAttribute][attribute.nodeName] = attribute.nodeValue;
           }
         }
       }
