@@ -9,7 +9,7 @@ function Header(props) {
     <div className="app-header">
       <GithubRibbon githubLink="https://github.com/phoa/fix-decoder" />
       <div className="app-header-title">
-        <h2>FIX Decoder</h2>
+        <h1>FIX Decoder</h1>
       </div>
     </div>
   );
